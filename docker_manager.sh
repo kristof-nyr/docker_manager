@@ -2,8 +2,8 @@
 #Készítette: Nyári Kristóf
 #Neptun: BFARTM
 
-export readonly DOCKER_USERNAME=bfartmneptun
-export readonly DOCKER_PASSWORD=TY6JFQtFEqiFiz3
+export readonly DOCKER_USERNAME=$(head -1 ./credentials)
+export readonly DOCKER_PASSWORD=$(tail -1 ./credentials)
 export readonly TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${DOCKER_USERNAME}'", "password": "'${DOCKER_PASSWORD}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
 
 #Echo color variables
@@ -31,6 +31,8 @@ checkPackages() {
     fi
 }
 
+
+#Help function, ami kiírja a script lehetséges használati módjait
 displayHelp() {
     echo -e "Wrong number of parameters!\nUsage:";
     echo -e "\n To list all repos in given namespace:\n ${0##*/} <namespace>"
@@ -38,19 +40,21 @@ displayHelp() {
     echo -e "\n To pull a certain docker image:\n ${0##*/} <namespace> <repository> <tag>"
 }
 
+#Kilistázza az adott namespace-n belüli repository-k nevét
 getRepositories() {
     namespace=$1
     curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${namespace}/?page_size=25" | jq -r '.results|.[]|.name'
 
 }
 
+#Kilistázza a megadott namespace:repository-ben elérhető image-k adatait és tag-jeit => ebből lehet megtudni mit szeretnénk lehúzni
 getSummary() {
     namespace=$1
     repository=$2
-    #curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/namespaces/${namespace}/repositories/${repository}/images-summary" | jq '.statistics| {total, active, inactive}'
     curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${namespace}/${repository}/tags/?page_size=25" | jq -r '.results|.[]| {name, images}'
 }
 
+#Lehúzza a specifikált docker image-t
 pullDockerImage() {
     namespace=$1
     repository=$2
