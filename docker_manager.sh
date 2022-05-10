@@ -2,8 +2,8 @@
 #Készítette: Nyári Kristóf
 #Neptun: BFARTM
 
-export readonly DOCKER_USERNAME=$(head -1 ./credentials | base64 -d)
-export readonly DOCKER_PASSWORD=$(tail -1 ./credentials | base64 -d)
+export readonly DOCKER_USERNAME=$(head -1 ./credentials.md | base64 -d)
+export readonly DOCKER_PASSWORD=$(tail -1 ./credentials.md | base64 -d)
 export readonly TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${DOCKER_USERNAME}'", "password": "'${DOCKER_PASSWORD}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
 
 #Echo color variables
