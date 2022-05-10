@@ -40,6 +40,10 @@ displayHelp() {
     echo -e "\n To pull a certain docker image:\n ${0##*/} <namespace> <repository> <tag>"
 }
 
+displayHeader() {
+    echo -e "=====================================================\n==================BFARTM HOMEWORK====================\n====================================================="
+}
+
 #Kilistázza az adott namespace-n belüli repository-k nevét
 getRepositories() {
     namespace=$1
@@ -64,6 +68,7 @@ pullDockerImage() {
 
 
 main() {
+    displayHeader
     checkPackages
     case "$#" in
         1)
