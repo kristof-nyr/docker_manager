@@ -17,7 +17,7 @@ sudo gpasswd -a `(whoami)` docker
 sudo systemctl restart docker
 ```
 A script futtatása
-```bash
+```
 chmod u+x ./docker_manager.sh
 
 To list all repos in given namespace
@@ -27,5 +27,5 @@ To list tags of the given repository
 ./docker_manager.sh <namespace> <repository>
 
 To pull a certain docker image
-./docker_manager.sh <namespace> <tag>
+./docker_manager.sh <namespace> <repository> <tag>
 ```
